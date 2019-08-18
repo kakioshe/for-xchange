@@ -7,13 +7,20 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.exchangeMain{
+.exchangeMain {
   width: 50%;
   margin: auto;
   padding-top: 50px;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+.header {
+  background-color: #f1582e;
+}
+
+input[type="text"]
+{
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid;
+    width:100%;
 }
