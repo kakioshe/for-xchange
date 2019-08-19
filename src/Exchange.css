@@ -78,6 +78,11 @@
   border-color: #b34b2e;
 }
 
+.btn-primary:disabled {
+  background-color: #b34b2e;
+  border-color: #b34b2e;
+}
+
 input[type="text"]
 {
   background: transparent;

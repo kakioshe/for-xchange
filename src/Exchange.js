@@ -45,7 +45,7 @@ class Exchange extends Component {
 
   //Function to add a new currency
   addItem(e){
-    if (this.state.selectedCur !== "") {
+    if (this.state.selectedCur !== null) {
       var newItem = {
         key: this.state.selectedCur.value,
         text: this.state.selectedCur.text
@@ -129,7 +129,7 @@ class Exchange extends Component {
                     options={currencyOptions}/>
           </Col>
           <Col xs={6} md={2} className="form-item">
-            <Button variant="primary" type="submit" block>Add</Button>
+            <Button variant="primary" type="submit" disabled={this.state.selectedCur === null} block>Add</Button>
           </Col>
           <Col xs={6} md={2} className="form-item">
             <Button variant="light" onClick={this.handleAddNewCur} block>Cancel</Button>

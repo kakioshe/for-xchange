@@ -1,17 +1,21 @@
-FROM node:carbon
+FROM node:carbon as init-build
 
 #Create app dir
-WORKDIR /usr/src/for-xchange
+WORKDIR /app
+
+# Bundle app source
+COPY . ./
 
 #Install app dependencies
 COPY package*.json ./
 RUN npm install
 
-# Bundle app source
-COPY . .
+RUN npm run build
 
-#Bind to port 3000
-EXPOSE 3000
+FROM nginx:alpine
 
-#Start app
-CMD ["npm","start"]
+COPY --from=init-build /app/build /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
