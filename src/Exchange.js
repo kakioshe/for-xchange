@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import ExchangeItems from "./ExchangeItems";
 import Select from 'react-select';
 
+import './Exchange.css';
+
 import { Grid, Container, Row, Col, Button } from 'react-bootstrap';
 
 const currencyOptions = [
@@ -111,7 +113,6 @@ class Exchange extends Component {
                 </Col>
               </Row>
             </div>
-            <br />
             <div className="body">
               <form onSubmit={this.addItem}>
                 <ExchangeItems
@@ -120,11 +121,18 @@ class Exchange extends Component {
                   value={this.state.value}
                   currentCur={this.state.baseCur.value}
                   onDelete={this.deleteCurrency}/>
-                <Select value = {this.state.selectedCur}
-                        placeholder="Item Name"
-                        onChange={this.addCur}
-                        options={currencyOptions}/>
-                <Button variant="primary" type="submit">Add</Button>
+                <Row
+                className="newCurForm">
+                  <Col sm={10}>
+                    <Select value = {this.state.selectedCur}
+                            placeholder="Item Name"
+                            onChange={this.addCur}
+                            options={currencyOptions}/>
+                  </Col>
+                  <Col sm={2}>
+                    <Button variant="primary" type="submit">Add</Button>
+                  </Col>
+                </Row>
               </form>
             </div>
           </div>
