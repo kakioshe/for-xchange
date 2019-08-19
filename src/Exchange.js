@@ -4,8 +4,9 @@ import Select from 'react-select';
 
 import './Exchange.css';
 
-import { Grid, Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 
+// Supported Currencies
 const currencyOptions = [
   { value: 'USD', label: 'USD', text:'United States Dollar'},
   { value: 'CAD', label: 'CAD', text:'Canadian Dollar'},
@@ -18,7 +19,9 @@ const currencyOptions = [
   { value: 'JPY', label: 'JPY', text:'Japanese Yen'},
   { value: 'KRW', label: 'KRW', text:'South Korean Won'},
 ]
+
 class Exchange extends Component {
+  // Base Constructor for the application
   constructor(props) {
     super(props);
     this.addItem = this.addItem.bind(this);
@@ -34,11 +37,13 @@ class Exchange extends Component {
         label: "USD",
         text: "United States Dollar"
       },
-      value: 10.00,
+      value: 10.0000,
       selectedCur: null,
       isSelectCur: false,
     };
   }
+
+  //Function to add a new currency
   addItem(e){
     if (this.state.selectedCur !== "") {
       var newItem = {
@@ -52,12 +57,13 @@ class Exchange extends Component {
           };
         });
       }
-      this.state.selectedCur = null;
+      this.setState({ selectedCur: null });
     }
     this.setState({ isSelectCur: false });
     e.preventDefault();
   }
 
+  //Function to fetch API data
   fetchAPI(baseCur = this.state.baseCur.value ){
     const apiData = fetch(`https://api.exchangeratesapi.io/latest?base=${baseCur}`)
 
@@ -70,27 +76,31 @@ class Exchange extends Component {
         rates: resJson.rates
       })
     })
-
   }
 
+  //Function to update the Base Currency
   updateBaseCurrency = baseCur => {
     this.setState({ baseCur })
     this.fetchAPI(baseCur.value);
   }
 
+  //Function to add a new target currency
   addCur = selectedCur => {
     this.setState({ selectedCur })
   }
 
+  //Function to remove target currency
   deleteCurrency = currencyKey => {
     const items = this.state.items.filter(item => item.key !== currencyKey);
     this.setState({ items: items});
   }
 
+  //Function to handle value change
   handleChange (event) {
     this.setState({ value: event.target.value })
   }
 
+  //Function to handle adding new target currency event
   handleAddNewCur() {
     if (this.state.isSelectCur === false){
       this.setState({ isSelectCur: true });
@@ -99,9 +109,11 @@ class Exchange extends Component {
     }
   }
 
+  //Fetch API upon mount
   componentDidMount(){
     this.fetchAPI();
   }
+
   render() {
     const isSelectCur = this.state.isSelectCur;
     let selectNewCur;
@@ -109,17 +121,17 @@ class Exchange extends Component {
     if (isSelectCur) {
       selectNewCur = (
         <Row
-        className="newCurForm">
-          <Col xs={12} lg={8} className="formItem">
+        className="new-currency-form">
+          <Col xs={12} md={8} className="form-item">
             <Select value = {this.state.selectedCur}
                     placeholder="Currency Name"
                     onChange={this.addCur}
                     options={currencyOptions}/>
           </Col>
-          <Col xs={6} lg={2} className="formItem">
+          <Col xs={6} md={2} className="form-item">
             <Button variant="primary" type="submit" block>Add</Button>
           </Col>
-          <Col xs={6} lg={2} className="formItem">
+          <Col xs={6} md={2} className="form-item">
             <Button variant="light" onClick={this.handleAddNewCur} block>Cancel</Button>
           </Col>
         </Row>
@@ -127,28 +139,28 @@ class Exchange extends Component {
     } else {
       selectNewCur = (
         <Row
-        className="newCurForm">
+        className="new-currency-form">
           <Col>
-            <Button variant="light" onClick={this.handleAddNewCur} block>Add New Currency</Button>
+            <Button variant="light" onClick={this.handleAddNewCur} block>Add More Currencies</Button>
           </Col>
         </Row>
       )
     }
 
     return (
-      <Container>
         <Row>
-          <div className="exchangeMain">
+          <div className="exchange-main">
             <div className="header">
-              <p className="headerTitle">{this.state.baseCur.value} - {this.state.baseCur.text}</p>
+              <h1>Foreign Exchange Rate</h1>
+              <p className="header-title">{this.state.baseCur.value} - {this.state.baseCur.text}</p>
               <Row>
-                <Col sm={8} xs={12} className="formItem">
+                <Col sm={8} xs={12} className="form-item">
                   <Select
                     value={this.state.baseCur}
                     onChange={this.updateBaseCurrency}
                     options={currencyOptions}/>
                 </Col>
-                <Col sm={4} xs={12} className="formItem">
+                <Col sm={4} xs={12} className="form-item">
                   <input
                     type="text"
                     value={this.state.value}
@@ -156,7 +168,7 @@ class Exchange extends Component {
                 </Col>
               </Row>
             </div>
-            <div className="body">
+            <Container className="main-body">
               <form onSubmit={this.addItem}>
                 <ExchangeItems
                   entries={this.state.items}
@@ -166,10 +178,9 @@ class Exchange extends Component {
                   onDelete={this.deleteCurrency}/>
                 { selectNewCur }
               </form>
-            </div>
+            </Container>
           </div>
         </Row>
-    </Container>
     )
   }
 }

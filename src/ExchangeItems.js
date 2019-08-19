@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid, Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 
 import './ExchangeItems.css';
 
