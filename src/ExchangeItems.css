@@ -1,4 +1,18 @@
-.currencyList {
-  border-bottom: 1px solid black;
-  padding: 1em 1.25em;
+.currency-list {
+  border-bottom: 1px solid #DDDDDD;
+  padding: 1.25em;
+}
+
+.item-title {
+  font-size: 1.2em;
+  font-weight: 500;
+}
+
+.converted-amount {
+  text-align: right;
+}
+
+.item-currency {
+  color: #474747;
+  font-style: italic;
 }

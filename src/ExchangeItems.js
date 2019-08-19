@@ -13,30 +13,26 @@ class ExchangeItems extends Component {
 
     var listItems = currencyEntries.map((item, i) =>{
       const convertedAmount = (value * currencyRates[item.key]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-      console.log(value);
       return (
-        <Row key={i} className="currencyList">
-          <Col sm={10}>
-            <div>
+        <Row key={i} className="currency-list">
+          <Col xs={12} sm={10}>
               <Row>
-                <Col><p>{item.key}</p></Col>
-                <Col><p>{convertedAmount}</p></Col>
+                <Col xs={2}><p className="item-title">{item.key}</p></Col>
+                <Col xs={10}><p className="converted-amount item-title">{convertedAmount}</p></Col>
               </Row>
               <Row>
-                <Col><p>{item.key} - {item.text}</p></Col>
+                <Col><p className="item-description">{item.key} - {item.text}</p></Col>
               </Row>
               <Row>
-                <Col><p>1 {currentCur} = {item.key} {currencyRates[item.key].toFixed(4).replace(/\d(?=(\d{3})+\.)/g, '$&,')} </p></Col>
+                <Col><p className="item-currency">1 {currentCur} = {item.key} {currencyRates[item.key].toFixed(4).replace(/\d(?=(\d{3})+\.)/g, '$&,')} </p></Col>
               </Row>
-            </div>
           </Col>
-          <Col sm={2}>
-            <Button onClick={() => this.props.onDelete(item.key)} variant="danger">X</Button>
+          <Col xs={12} sm={2}>
+            <Button onClick={() => this.props.onDelete(item.key)} variant="danger" block>X</Button>
           </Col>
         </Row>
       )
     });
-    console.log(listItems);
 
     return (
       <Container>

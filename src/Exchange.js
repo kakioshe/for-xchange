@@ -24,6 +24,7 @@ class Exchange extends Component {
     this.addItem = this.addItem.bind(this);
     this.updateBaseCurrency = this.updateBaseCurrency.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleAddNewCur = this.handleAddNewCur.bind(this);
 
     this.state = {
       items: [],
@@ -35,6 +36,7 @@ class Exchange extends Component {
       },
       value: 10.00,
       selectedCur: null,
+      isSelectCur: false,
     };
   }
   addItem(e){
@@ -43,14 +45,16 @@ class Exchange extends Component {
         key: this.state.selectedCur.value,
         text: this.state.selectedCur.text
       };
-
-      this.setState((prevState) => {
-        return {
-          items: prevState.items.concat(newItem)
-        };
-      });
+      if(this.state.items.filter(item => item.key === newItem.key).length === 0){
+        this.setState((prevState) => {
+          return {
+            items: prevState.items.concat(newItem)
+          };
+        });
+      }
       this.state.selectedCur = null;
     }
+    this.setState({ isSelectCur: false });
     e.preventDefault();
   }
 
@@ -66,7 +70,6 @@ class Exchange extends Component {
         rates: resJson.rates
       })
     })
-    console.log(this.state.data)
 
   }
 
@@ -88,24 +91,64 @@ class Exchange extends Component {
     this.setState({ value: event.target.value })
   }
 
+  handleAddNewCur() {
+    if (this.state.isSelectCur === false){
+      this.setState({ isSelectCur: true });
+    } else {
+      this.setState({ isSelectCur: false });
+    }
+  }
+
   componentDidMount(){
     this.fetchAPI();
   }
   render() {
+    const isSelectCur = this.state.isSelectCur;
+    let selectNewCur;
+
+    if (isSelectCur) {
+      selectNewCur = (
+        <Row
+        className="newCurForm">
+          <Col xs={12} lg={8} className="formItem">
+            <Select value = {this.state.selectedCur}
+                    placeholder="Currency Name"
+                    onChange={this.addCur}
+                    options={currencyOptions}/>
+          </Col>
+          <Col xs={6} lg={2} className="formItem">
+            <Button variant="primary" type="submit" block>Add</Button>
+          </Col>
+          <Col xs={6} lg={2} className="formItem">
+            <Button variant="light" onClick={this.handleAddNewCur} block>Cancel</Button>
+          </Col>
+        </Row>
+      );
+    } else {
+      selectNewCur = (
+        <Row
+        className="newCurForm">
+          <Col>
+            <Button variant="light" onClick={this.handleAddNewCur} block>Add New Currency</Button>
+          </Col>
+        </Row>
+      )
+    }
+
     return (
       <Container>
         <Row>
           <div className="exchangeMain">
             <div className="header">
-              <p>{this.state.baseCur.value} - {this.state.baseCur.text}</p>
+              <p className="headerTitle">{this.state.baseCur.value} - {this.state.baseCur.text}</p>
               <Row>
-                <Col sm={8}>
+                <Col sm={8} xs={12} className="formItem">
                   <Select
                     value={this.state.baseCur}
                     onChange={this.updateBaseCurrency}
                     options={currencyOptions}/>
                 </Col>
-                <Col sm={4}>
+                <Col sm={4} xs={12} className="formItem">
                   <input
                     type="text"
                     value={this.state.value}
@@ -121,18 +164,7 @@ class Exchange extends Component {
                   value={this.state.value}
                   currentCur={this.state.baseCur.value}
                   onDelete={this.deleteCurrency}/>
-                <Row
-                className="newCurForm">
-                  <Col sm={10}>
-                    <Select value = {this.state.selectedCur}
-                            placeholder="Item Name"
-                            onChange={this.addCur}
-                            options={currencyOptions}/>
-                  </Col>
-                  <Col sm={2}>
-                    <Button variant="primary" type="submit">Add</Button>
-                  </Col>
-                </Row>
+                { selectNewCur }
               </form>
             </div>
           </div>
